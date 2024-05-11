@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Algorithm</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .navbar-brand img {
+            max-width: 100%; /* Logo 图片最大宽度为容器宽度 */
+            height: auto; /* 等比例缩放高度 */
+        }
+        .navbar-nav > li > a {
+            padding: 10px 15px; /* 调整导航项的内边距 */
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa; /* 添加背景颜色 */
+        }
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+            color: #333; /* 调整标题颜色 */
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555; /* 调整标签颜色 */
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff; /* 修改按钮颜色 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3; /* 修改按钮 hover 颜色 */
+        }
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <i class="fas fa-bars"></i> <!-- 使用 Font Awesome 图标代替默认的三条线图标 -->
+            </button>
+            <a class="navbar-brand" href="#" style="padding: 1px 20px">
+                <img src="{% static 'img/ico100.png' %}" alt="Logo" class="logo"> <!-- 自定义 Logo 图片 -->
+            </a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/schedule/calculate"><i class="fas fa-calculator"></i> 计算1</a></li>
+                <!-- 使用 Font Awesome 图标 -->
+                <li><a href="/schedule/calculate3"><i class="fas fa-calculator"></i> 计算3</a></li>
+                <li><a href="/schedule/calculate4"><i class="fas fa-calculator"></i> 计算4</a></li>
+                <!-- 使用 Font Awesome 图标 -->
+                <li><a href="/schedule/my_task"><i class="fas fa-calculator"></i> 我的任务</a></li>
+                <!-- 使用 Font Awesome 图标 -->
+                <li><a href="/index"><i class="fas fa-home"></i> 主页</a></li> <!-- 使用 Font Awesome 图标 -->
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <h1>贝叶斯分类器实现</h1>
+
+    <form id="algorithmForm">
+        {% csrf_token %}
+        <label for="functionCode">文本:</label>
+        <input type="text" id="functionCode" name="functionCode" required>
+        <br>
+        <input type="file" id="data_file" name="data_file" accept=".csv">
+        <br>
+        <input type="submit" value="提交并运行">
+    </form>
+</div>
+
+<script>
+        document.getElementById('algorithmForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // 阻止表单默认提交行为
+            var form = document.getElementById('algorithmForm');
+            var formData = new FormData(form);
+            fetch('/schedule/calculate2/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                fetch('/schedule/start/', {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value
+                    }
+                })
+                .then(response => {
+                    window.location.href = '/schedule/calculate2/';
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+            document.getElementById('functionCode').value = '';
+            document.getElementById('data_file').value = '';
+        });
+
+</script>
+<script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
